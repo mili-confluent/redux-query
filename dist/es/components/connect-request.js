@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = exports.headersChanged = void 0;
 
 var _hoistNonReactStatics = _interopRequireDefault(require("hoist-non-react-statics"));
 
@@ -40,6 +40,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var normalizeToArray = function normalizeToArray(maybe) {
   return (Array.isArray(maybe) ? maybe : [maybe]).filter(Boolean);
@@ -80,6 +82,32 @@ var diffQueryConfigs = function diffQueryConfigs(prevQueryConfigs, queryConfigs)
     requestQueryConfigs: requestQueryConfigs
   };
 };
+
+var headersChanged = function headersChanged(queryConfigs, previousQueryConfigs) {
+  for (var i = 0; i < queryConfigs.length; i++) {
+    if (previousQueryConfigs[i] && queryConfigs[i] && previousQueryConfigs[i].options && queryConfigs[i].options) {
+      var prevHeaders = previousQueryConfigs[i].options.headers;
+      var headers = queryConfigs[i].options.headers;
+
+      if (prevHeaders != null && headers != null) {
+        var _ret = function () {
+          var prevHeaderValues = Object.values(prevHeaders);
+          var diffHeaders = Object.values(headers).some(function (value, i) {
+            return prevHeaderValues[i] != value;
+          });
+
+          if (diffHeaders) {
+            return {
+              v: true
+            };
+          }
+        }();
+
+        if (_typeof(_ret) === "object") return _ret.v;
+      }
+    }
+  }
+};
 /**
  * This hook memoizes the list of query configs that are returned form the `mapPropsToConfigs`
  * function. It also transforms the query configs to set `retry` to `true` and pass a
@@ -93,6 +121,8 @@ var diffQueryConfigs = function diffQueryConfigs(prevQueryConfigs, queryConfigs)
  * in the list's query key changes, an entirely new list of query configs is returned.
  */
 
+
+exports.headersChanged = headersChanged;
 
 var useMemoizedQueryConfigs = function useMemoizedQueryConfigs(mapPropsToConfigs, props, callback) {
   var queryConfigs = normalizeToArray(mapPropsToConfigs(props)).map(function (queryConfig) {
@@ -113,17 +143,19 @@ var useMemoizedQueryConfigs = function useMemoizedQueryConfigs(mapPropsToConfigs
       memoizedQueryConfigs = _React$useState2[0],
       setMemoizedQueryConfigs = _React$useState2[1];
 
+  var previousQueryConfigs = React.useRef(queryConfigs);
   var previousQueryKeys = React.useRef(queryConfigs.map(_reduxQuery.getQueryKey).filter(Boolean));
   React.useEffect(function () {
     var queryKeys = queryConfigs.map(_reduxQuery.getQueryKey).filter(Boolean);
 
     if (queryKeys.length !== previousQueryKeys.current.length || queryKeys.some(function (queryKey, i) {
       return previousQueryKeys.current[i] !== queryKey;
-    })) {
+    }) || headersChanged(queryConfigs, previousQueryConfigs.current)) {
       previousQueryKeys.current = queryKeys;
+      previousQueryConfigs.current = queryConfigs;
       setMemoizedQueryConfigs(queryConfigs);
     }
-  }, [queryConfigs]);
+  }, [queryConfigs, previousQueryConfigs]);
   return memoizedQueryConfigs;
 };
 
