@@ -3,6 +3,7 @@
 *.log
 coverage
 node_modules
+packages
 npm-debug.log
 package-lock.json
 .vscode

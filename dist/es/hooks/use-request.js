@@ -26,8 +26,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var useRequest = function useRequest(providedQueryConfig) {
-  var reduxDispatch = (0, _reactRedux.useDispatch)();
-  console.log('YESAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'); // This hook manually tracks the pending state, which is synchronized as precisely as possible
+  var reduxDispatch = (0, _reactRedux.useDispatch)(); // This hook manually tracks the pending state, which is synchronized as precisely as possible
   // with the Redux state. This may seem a little hacky, but we're trying to avoid any asynchronous
   // synchronization. Hence why the pending state here is using a ref and it is updated via a
   // synchronous callback, which is called from the redux-query query middleware.
