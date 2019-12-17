@@ -9,6 +9,8 @@ var React = _interopRequireWildcard(require("react"));
 
 var _reduxQuery = require("redux-query");
 
+var _headers = require("../headers");
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
@@ -37,11 +39,13 @@ var useMemoizedQueryConfig = function useMemoizedQueryConfig(providedQueryConfig
       setQueryConfig = _React$useState2[1];
 
   var previousQueryKey = React.useRef((0, _reduxQuery.getQueryKey)(providedQueryConfig));
+  var previousQueryConfig = React.useRef(providedQueryConfig);
   React.useEffect(function () {
     var queryKey = (0, _reduxQuery.getQueryKey)(providedQueryConfig);
 
-    if (queryKey !== previousQueryKey.current) {
+    if (queryKey !== previousQueryKey.current || (0, _headers.headersChanged)([queryConfig], [previousQueryConfig.current])) {
       previousQueryKey.current = queryKey;
+      previousQueryConfig.current = queryConfig;
       setQueryConfig(providedQueryConfig ? transform(providedQueryConfig) : null);
     }
   }, [providedQueryConfig, transform]);
