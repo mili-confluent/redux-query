@@ -27,6 +27,12 @@ Object.defineProperty(exports, "useRequest", {
     return _useRequest["default"];
   }
 });
+Object.defineProperty(exports, "useRequests", {
+  enumerable: true,
+  get: function get() {
+    return _useRequests["default"];
+  }
+});
 
 var _connectRequest = _interopRequireDefault(require("./components/connect-request"));
 
@@ -35,5 +41,7 @@ var _Provider = _interopRequireDefault(require("./components/Provider"));
 var _useMutation = _interopRequireDefault(require("./hooks/use-mutation"));
 
 var _useRequest = _interopRequireDefault(require("./hooks/use-request"));
+
+var _useRequests = _interopRequireDefault(require("./hooks/use-requests"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
