@@ -103,14 +103,16 @@ var useMultiRequest = function useMultiRequest(mapPropsToConfigs, props) {
       pendingRequests.current["delete"](queryKey);
     }
   });
-  var finishedCallback = (0, _useConstCallback["default"])(function () {
-    (function (queryKey) {
-      pendingRequests.current["delete"](queryKey);
-    });
+  var finishedCallback = (0, _useConstCallback["default"])(function (queryKey) {
+    return function () {
+      if (queryKey != null) {
+        pendingRequests.current["delete"](queryKey);
+      }
+    };
   });
   var transformQueryConfig = (0, _useConstCallback["default"])(function (queryConfig) {
     return _objectSpread({}, queryConfig, {
-      unstable_preDispatchCallback: finishedCallback,
+      unstable_preDispatchCallback: finishedCallback((0, _reduxQuery.getQueryKey)(queryConfig)),
       retry: true
     });
   }); // Query configs are memoized based on query key. As long as the query keys in the list don't
