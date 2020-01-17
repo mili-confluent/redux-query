@@ -43,9 +43,9 @@ var useMemoizedQueryConfig = function useMemoizedQueryConfig(providedQueryConfig
   React.useEffect(function () {
     var queryKey = (0, _reduxQuery.getQueryKey)(providedQueryConfig);
 
-    if (queryKey !== previousQueryKey.current || (0, _headers.headersChanged)([queryConfig], [previousQueryConfig.current])) {
+    if (queryKey !== previousQueryKey.current || providedQueryConfig != null && previousQueryConfig.current != null && (0, _headers.headersChanged)([providedQueryConfig], [previousQueryConfig.current])) {
       previousQueryKey.current = queryKey;
-      previousQueryConfig.current = queryConfig;
+      previousQueryConfig.current = providedQueryConfig;
       setQueryConfig(providedQueryConfig ? transform(providedQueryConfig) : null);
     }
   }, [providedQueryConfig, transform]);
