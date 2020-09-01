@@ -1,6 +1,6 @@
 {
   "name": "redux-query",
-  "version": "3.3.1",
+  "version": "3.4.2",
   "description": "A library for querying and managing network state in Redux applications",
   "homepage": "https://github.com/amplitude/redux-query",
   "main": "dist/commonjs/index.js",
@@ -36,7 +36,8 @@
     "backo": "^1.1.0",
     "idx": "^2.5.6",
     "invariant": "^2.2.0",
-    "json-stable-stringify": "^1.0.0"
+    "json-stable-stringify": "^1.0.0",
+    "reselect": "^4.0.0"
   },
   "peerDependencies": {
     "redux": "^4.0.0"
